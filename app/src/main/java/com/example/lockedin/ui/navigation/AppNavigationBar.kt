@@ -1,0 +1,197 @@
+package com.example.lockedin.ui.navigation
+
+import android.R.attr.tint
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlin.io.path.Path
+import kotlin.io.path.moveTo
+
+@Composable
+fun AppNavigationBar(navHostController: NavHostController) {
+
+    val items = listOf(
+        Screen.Home,
+        Screen.CreateEdit,
+        Screen.UserProfile
+    )
+
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .drawWithCache {
+                val path = Path().apply {
+                    // Start from the far left of the canvas, horizontally centered vertically
+                    moveTo(0f, 00f)
+
+                    // Draw straight line from left to the start of the bump
+                    lineTo(150f, 00f)
+
+                    // First curve: going upward
+                    cubicTo(
+                        180f, 0f,     // Control point 1
+                        180f, -20f,     // Control point 2
+                        210f, -20f      // End point of first curve
+                    )
+
+                    // Second curve: going downward
+                    cubicTo(
+                        240f, -20f,     // Control point 1
+                        240f, 0f,     // Control point 2
+                        270f, 0f      // End point of second curve
+                    )
+
+                    // Continue the rest of the line to the end
+                    lineTo(size.width, 0f)
+                }
+                onDrawWithContent {
+                    drawContent()
+//                    drawPath(
+//                        path = path,
+//                        color = Color.LightGray,
+//                        style = Stroke(
+//                            width = 1f,
+//                            cap = StrokeCap.Butt,
+//                            join = StrokeJoin.Round
+//                        )
+//                    )
+                }
+            }
+
+    ) {
+        Spacer(modifier = Modifier.weight(0.4f))
+        items.forEach{ item ->
+            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
+            val scaleIcon by animateFloatAsState(
+                targetValue = if (currentRoute == item.route) 1.1f else 1f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                ),
+                label = ""
+            )
+
+            NavigationBarItem(
+                interactionSource = remember {
+                    androidx.compose.foundation.interaction.MutableInteractionSource()
+                },
+                onClick = {
+                    if (navHostController.currentBackStackEntry?.destination?.route != item.route) {
+                        navHostController.navigate(item.route) {
+                            navHostController.graph.startDestinationRoute?.let { route ->
+                                popUpTo(route) {
+                                    saveState = true
+                                }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                },
+                icon = {
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 5.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (currentRoute != item.route) {
+                                    item.selectedIcon
+                                } else {
+                                    item.selectedIcon
+                                }
+                            ),
+                            contentDescription = item.title,
+                            modifier = Modifier
+                                .size(item.iconSize)
+                                .scale(
+                                    if (!item.isPrecolored)
+                                        scaleIcon else 1f
+                                )
+                        )
+                    }
+                },
+                label = {
+                    if (!item.isPrecolored) {
+                        Text(
+                            item.title,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                letterSpacing = (-0.03).em
+                            )
+                        )
+                    }
+                },
+                selected = currentRoute == item.route,
+                colors = NavigationBarItemDefaults.colors(
+                    unselectedIconColor = if (item.isPrecolored) {
+                        Color.Unspecified
+                    } else {
+                        Color.DarkGray
+                    },
+                    selectedIconColor = if (item.isPrecolored) {
+                        Color.Unspecified
+                    } else {
+                        MaterialTheme.colorScheme.secondary
+                    },
+                    unselectedTextColor = Color.DarkGray,
+                    indicatorColor = Color.Transparent,
+
+                )
+            )
+        Spacer(modifier = Modifier.weight(0.4f))
+    }
+}
+    }
