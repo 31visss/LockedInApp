@@ -28,7 +28,7 @@ sealed class Screen(
     object CreateEdit: Screen(
         "Create Edit",
         "create_edit",
-        100.dp,
+        60.dp,
         true,
         R.drawable.house,
         R.drawable.house_fill)

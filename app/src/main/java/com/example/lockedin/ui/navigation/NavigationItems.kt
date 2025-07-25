@@ -1,11 +1,15 @@
 package com.example.lockedin.ui.navigation
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemColors
@@ -18,10 +22,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -31,10 +37,12 @@ import com.example.lockedin.ui.theme.LockedInTheme
 @Composable
 fun NavigationItems(
     icon: Int,
+    iconSize: Dp,
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
-    colors: NavigationBarItemColors = NavigationBarItemDefaults.colors()
+    colors: NavigationBarItemColors = NavigationBarItemDefaults.colors(),
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
@@ -45,13 +53,16 @@ fun NavigationItems(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
+            modifier = Modifier.size(iconSize),
             painter = painterResource(id = icon),
             contentDescription = label,
+            tint = if (selected) colors.selectedIconColor else colors.unselectedIconColor
         )
         Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = label,
+            color = if (selected) colors.selectedTextColor else colors.unselectedTextColor,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
@@ -68,15 +79,16 @@ fun NavigationItemsPreview() {
     val selected = remember { mutableStateOf(false) }
     LockedInTheme {
         NavigationItems(
+            iconSize = 20.dp,
             icon = if (!selected.value) R.drawable.house else R.drawable.house_fill,
             label = "Home",
             selected = true,
             onClick = { selected.value = !selected.value },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
-                unselectedIconColor = Color.DarkGray,
+                unselectedIconColor = Color.Black,
                 selectedTextColor = Color.White,
-                unselectedTextColor = Color.DarkGray,
+                unselectedTextColor = Color.Black,
                 indicatorColor = Color.Transparent,
             )
         )

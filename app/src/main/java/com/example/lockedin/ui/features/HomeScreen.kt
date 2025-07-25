@@ -1,61 +1,72 @@
 package com.example.lockedin.ui.features
 
-import android.R.attr.contentDescription
-import android.graphics.Canvas
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Icon
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.lockedin.R
 
 @Composable
 fun HomeScreen() {
-    Canvas(modifier = Modifier.fillMaxWidth().height(80.dp)) {
+    val bumpHeight = with(LocalDensity.current) {25.dp.toPx()}
+    val cornerRadius = with(LocalDensity.current) {20.dp.toPx()}
+    val bumpWidth = with(LocalDensity.current) {60.dp.toPx()}
+
+    Canvas(modifier = Modifier
+        .fillMaxWidth()
+        .height(80.dp)) {
         val path = Path().apply {
-            // Start from the far left of the canvas, horizontally centered vertically
-            moveTo(0f, 60f)
-
-            // Draw straight line from left to the start of the bump
-            lineTo(150f, 60f)
-
-            // First curve: going upward
-            cubicTo(
-                180f, 60f,     // Control point 1
-                180f, 40f,     // Control point 2
-                210f, 40f      // End point of first curve
+            moveTo(0f, size.height)
+            lineTo(0f, bumpHeight + cornerRadius)
+            arcTo(
+                rect = Rect(
+                    0f,
+                    bumpHeight,
+                    cornerRadius * 2,
+                    bumpHeight + cornerRadius * 2
+                ),
+                startAngleDegrees = 180f,
+                sweepAngleDegrees = 90f,
+                forceMoveTo = false
             )
 
-            // Second curve: going downward
-            cubicTo(
-                240f, 40f,     // Control point 1
-                240f, 60f,     // Control point 2
-                270f, 60f      // End point of second curve
-            )
-
-            // Continue the rest of the line to the end
-            lineTo(size.width, 60f)
         }
+//            addRoundRect(
+//                RoundRect(
+//                    left = 0f,
+//                    top = bumpHeight,
+//                    right = size.width,
+//                    bottom = size.height,
+//                    topLeftCornerRadius = CornerRadius(cornerRadius, cornerRadius),
+//                    topRightCornerRadius = CornerRadius(cornerRadius, cornerRadius),
+//                    bottomRightCornerRadius = CornerRadius.Zero, // Straight bottom-right
+//                    bottomLeftCornerRadius = CornerRadius.Zero   // St
+//                )
+//            )
+//            moveTo(
+//                x = size.width/2 - bumpWidth/2,
+//                y = bumpHeight
+//            )
+//
+//            quadraticBezierTo(
+//                x1 = size.width/2,
+//                y1 = 0f,
+//                x2 = size.width/2 + bumpWidth/2,
+//                y2 = bumpHeight
+//            )
+//        }
 
         drawPath(
             path = path,
@@ -67,6 +78,10 @@ fun HomeScreen() {
             )
         )
     }
+}
 
-
+@Preview
+@Composable
+fun ShapePreview() {
+    HomeScreen()
 }

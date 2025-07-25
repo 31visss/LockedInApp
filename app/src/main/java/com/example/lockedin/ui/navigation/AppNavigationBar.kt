@@ -108,7 +108,7 @@ fun AppNavigationBar(navHostController: NavHostController) {
             }
 
     ) {
-        Spacer(modifier = Modifier.weight(0.4f))
+        Spacer(modifier = Modifier.weight(1f))
         items.forEach{ item ->
             val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
@@ -122,76 +122,31 @@ fun AppNavigationBar(navHostController: NavHostController) {
                 label = ""
             )
 
-            NavigationBarItem(
-                interactionSource = remember {
-                    androidx.compose.foundation.interaction.MutableInteractionSource()
-                },
-                onClick = {
-                    if (navHostController.currentBackStackEntry?.destination?.route != item.route) {
-                        navHostController.navigate(item.route) {
-                            navHostController.graph.startDestinationRoute?.let { route ->
-                                popUpTo(route) {
-                                    saveState = true
-                                }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+        NavigationItems(
+            icon = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
+            iconSize = item.iconSize,
+            label = if (!item.isPrecolored) item.title else "",
+            selected = currentRoute == item.route,
+            onClick = {
+                navHostController.navigate(item.route) {
+                    navHostController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
                         }
                     }
+                    launchSingleTop = true
+                    restoreState = true
+                }
                 },
-                icon = {
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 5.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                id = if (currentRoute != item.route) {
-                                    item.selectedIcon
-                                } else {
-                                    item.selectedIcon
-                                }
-                            ),
-                            contentDescription = item.title,
-                            modifier = Modifier
-                                .size(item.iconSize)
-                                .scale(
-                                    if (!item.isPrecolored)
-                                        scaleIcon else 1f
-                                )
-                        )
-                    }
-                },
-                label = {
-                    if (!item.isPrecolored) {
-                        Text(
-                            item.title,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                letterSpacing = (-0.03).em
-                            )
-                        )
-                    }
-                },
-                selected = currentRoute == item.route,
-                colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = if (item.isPrecolored) {
-                        Color.Unspecified
-                    } else {
-                        Color.DarkGray
-                    },
-                    selectedIconColor = if (item.isPrecolored) {
-                        Color.Unspecified
-                    } else {
-                        MaterialTheme.colorScheme.secondary
-                    },
-                    unselectedTextColor = Color.DarkGray,
-                    indicatorColor = Color.Transparent,
-
-                )
-            )
-        Spacer(modifier = Modifier.weight(0.4f))
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.White,
+                unselectedIconColor = Color.DarkGray,
+                selectedTextColor = Color.White,
+                unselectedTextColor = Color.DarkGray,
+                indicatorColor = Color.Transparent,
+            ),
+        )
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
     }
