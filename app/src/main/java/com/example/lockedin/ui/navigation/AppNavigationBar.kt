@@ -64,49 +64,11 @@ fun AppNavigationBar(navHostController: NavHostController) {
     )
 
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.White,
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
-            .drawWithCache {
-                val path = Path().apply {
-                    // Start from the far left of the canvas, horizontally centered vertically
-                    moveTo(0f, 00f)
-
-                    // Draw straight line from left to the start of the bump
-                    lineTo(150f, 00f)
-
-                    // First curve: going upward
-                    cubicTo(
-                        180f, 0f,     // Control point 1
-                        180f, -20f,     // Control point 2
-                        210f, -20f      // End point of first curve
-                    )
-
-                    // Second curve: going downward
-                    cubicTo(
-                        240f, -20f,     // Control point 1
-                        240f, 0f,     // Control point 2
-                        270f, 0f      // End point of second curve
-                    )
-
-                    // Continue the rest of the line to the end
-                    lineTo(size.width, 0f)
-                }
-                onDrawWithContent {
-                    drawContent()
-//                    drawPath(
-//                        path = path,
-//                        color = Color.LightGray,
-//                        style = Stroke(
-//                            width = 1f,
-//                            cap = StrokeCap.Butt,
-//                            join = StrokeJoin.Round
-//                        )
-//                    )
-                }
-            }
-
+            .height(105.dp)
+            .clip(BumpShape(25.dp, 60.dp, 20.dp))
     ) {
         Spacer(modifier = Modifier.weight(1f))
         items.forEach{ item ->
@@ -127,6 +89,7 @@ fun AppNavigationBar(navHostController: NavHostController) {
             iconSize = item.iconSize,
             label = if (!item.isPrecolored) item.title else "",
             selected = currentRoute == item.route,
+            isEdited = item.isPrecolored,
             onClick = {
                 navHostController.navigate(item.route) {
                     navHostController.graph.startDestinationRoute?.let { route ->
@@ -146,6 +109,7 @@ fun AppNavigationBar(navHostController: NavHostController) {
                 indicatorColor = Color.Transparent,
             ),
         )
+
         Spacer(modifier = Modifier.weight(1f))
     }
 }

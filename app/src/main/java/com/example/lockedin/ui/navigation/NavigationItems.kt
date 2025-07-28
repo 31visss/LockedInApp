@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,12 +42,14 @@ fun NavigationItems(
     iconSize: Dp,
     label: String,
     selected: Boolean,
+    isEdited: Boolean,
     onClick: () -> Unit,
     colors: NavigationBarItemColors = NavigationBarItemDefaults.colors(),
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
+            .padding(top = 30.dp)
             .clickable(onClick = onClick,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }),
@@ -53,7 +57,9 @@ fun NavigationItems(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            modifier = Modifier.size(iconSize),
+            modifier = Modifier
+                .size(iconSize)
+                .offset(y = if (isEdited) -10.dp else 0.dp),
             painter = painterResource(id = icon),
             contentDescription = label,
             tint = if (selected) colors.selectedIconColor else colors.unselectedIconColor
@@ -83,6 +89,7 @@ fun NavigationItemsPreview() {
             icon = if (!selected.value) R.drawable.house else R.drawable.house_fill,
             label = "Home",
             selected = true,
+            isEdited = true,
             onClick = { selected.value = !selected.value },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,

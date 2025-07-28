@@ -1,5 +1,6 @@
 package com.example.lockedin.ui.features
 
+import android.graphics.drawable.shapes.Shape
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -41,6 +44,29 @@ fun HomeScreen() {
                 sweepAngleDegrees = 90f,
                 forceMoveTo = false
             )
+            lineTo(size.width/2 - bumpWidth/2, bumpHeight)
+            quadraticBezierTo(
+                x1 = size.width/2,
+                y1 = 0f,
+                x2 = size.width/2 + bumpWidth/2,
+                y2 = bumpHeight
+            )
+            lineTo(size.width - cornerRadius, bumpHeight
+            )
+            arcTo(
+                rect = Rect(
+                    size.width - cornerRadius * 2,
+                    bumpHeight,
+                    size.width,
+                    bumpHeight + cornerRadius * 2
+                ),
+                startAngleDegrees = 270f,
+                sweepAngleDegrees = 90f,
+                forceMoveTo = false
+            )
+            lineTo(size.width, size.height)
+
+
 
         }
 //            addRoundRect(
