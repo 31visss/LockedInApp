@@ -51,4 +51,18 @@ fun MainApp() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    LockedInTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            MainApp()
+        }
+
+    }
+}
+
 

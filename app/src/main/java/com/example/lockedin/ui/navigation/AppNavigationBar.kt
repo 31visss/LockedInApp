@@ -64,25 +64,17 @@ fun AppNavigationBar(navHostController: NavHostController) {
     )
 
     NavigationBar(
-        containerColor = Color.White,
+        containerColor = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
             .height(105.dp)
             .clip(BumpShape(25.dp, 60.dp, 20.dp))
+            .border(1.2.dp, Color(0xFF1A1A1A), BorderShape(25.dp,60.dp,30.dp))
     ) {
         Spacer(modifier = Modifier.weight(1f))
         items.forEach{ item ->
             val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-
-            val scaleIcon by animateFloatAsState(
-                targetValue = if (currentRoute == item.route) 1.1f else 1f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                ),
-                label = ""
-            )
 
         NavigationItems(
             icon = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,

@@ -74,3 +74,62 @@ class BumpShape(
         return Outline.Generic(path)
     }
 }
+
+class BorderShape(
+    private val bumpHeight: Dp,
+    private val bumpWidth: Dp,
+    private val cornerRadius: Dp
+) : Shape {
+
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val bumpHeight = with(density) {bumpHeight.toPx()}
+        val bumpWidth = with(density) {bumpWidth.toPx()}
+        val cornerRadius = with(density) {cornerRadius.toPx()}
+
+        val path = Path().apply {
+            moveTo(-5f, bumpHeight + cornerRadius)
+
+            arcTo(
+                rect = Rect(
+                    -5f,
+                    bumpHeight,
+                    (cornerRadius * 2) - 5f,
+                    bumpHeight + cornerRadius * 2
+                ),
+                startAngleDegrees = 180f,
+                sweepAngleDegrees = 90f,
+                forceMoveTo = false
+            )
+
+            lineTo(size.width / 2 - (bumpWidth / 2 + 10), bumpHeight)
+
+            quadraticBezierTo(
+                x1 = size.width / 2,
+                y1 = 0f,
+                x2 = size.width / 2 + (bumpWidth / 2 + 10),
+                y2 = bumpHeight
+            )
+
+            lineTo(size.width - cornerRadius, bumpHeight)
+
+            arcTo(
+                rect = Rect(
+                    size.width - cornerRadius * 2,
+                    bumpHeight,
+                    size.width,
+                    bumpHeight + cornerRadius * 2
+                ),
+                startAngleDegrees = 270f,
+                sweepAngleDegrees = 90f,
+                forceMoveTo = false
+            )
+
+        }
+
+        return Outline.Generic(path)
+    }
+}
