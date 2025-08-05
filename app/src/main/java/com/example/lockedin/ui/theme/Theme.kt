@@ -1,6 +1,7 @@
 package com.example.lockedin.ui.theme
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -33,8 +34,8 @@ fun LockedInTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb() // Or any color you prefer
-            window.navigationBarColor = colorScheme.background.toArgb()
+            window.statusBarColor = Color.TRANSPARENT // Or any color you prefer
+            window.navigationBarColor = Color.TRANSPARENT
 
             // Set this based on your single theme's nature
             // If AppSingleColorScheme is light, then isAppearanceLightStatusBars should be true.

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -43,8 +44,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -54,8 +57,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlin.io.path.Path
 import kotlin.io.path.moveTo
 
+
 @Composable
-fun AppNavigationBar(navHostController: NavHostController) {
+fun AppNavigationBar(navHostController: NavHostController, bottomPadding: Dp) {
 
     val items = listOf(
         Screen.Home,
@@ -64,43 +68,45 @@ fun AppNavigationBar(navHostController: NavHostController) {
     )
 
     NavigationBar(
-        containerColor = Color.Transparent,
+        containerColor = Color.Red,
         modifier = Modifier
             .fillMaxWidth()
-            .height(105.dp)
+            //.padding(bottom = bottomPadding)
+            .height(120.dp)
             .clip(BumpShape(25.dp, 60.dp, 20.dp))
-            .border(1.2.dp, Color(0xFF1A1A1A), BorderShape(25.dp,60.dp,30.dp))
+            .border(1.2.dp, Color(0xFF1A1A1A), BorderShape(25.dp, 60.dp, 25.dp))
     ) {
         Spacer(modifier = Modifier.weight(1f))
         items.forEach{ item ->
             val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
-        NavigationItems(
-            icon = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
-            iconSize = item.iconSize,
-            label = if (!item.isPrecolored) item.title else "",
-            selected = currentRoute == item.route,
-            isEdited = item.isPrecolored,
-            onClick = {
-                navHostController.navigate(item.route) {
-                    navHostController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
+            NavigationItems(
+                modifier = Modifier.fillMaxHeight(),
+                icon = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
+                iconSize = item.iconSize,
+                label = if (!item.isPrecolored) item.title else "",
+                selected = currentRoute == item.route,
+                isEdited = item.isPrecolored,
+                onClick = {
+                    navHostController.navigate(item.route) {
+                        navHostController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
                 },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = Color.White,
-                unselectedIconColor = Color.DarkGray,
-                selectedTextColor = Color.White,
-                unselectedTextColor = Color.DarkGray,
-                indicatorColor = Color.Transparent,
-            ),
-        )
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color.DarkGray,
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color.DarkGray,
+                    indicatorColor = Color.Transparent,
+                )
+            )
 
         Spacer(modifier = Modifier.weight(1f))
     }

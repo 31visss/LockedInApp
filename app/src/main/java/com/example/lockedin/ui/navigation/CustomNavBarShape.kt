@@ -91,13 +91,13 @@ class BorderShape(
         val cornerRadius = with(density) {cornerRadius.toPx()}
 
         val path = Path().apply {
-            moveTo(-5f, bumpHeight + cornerRadius)
+            moveTo(-8f, bumpHeight + cornerRadius)
 
             arcTo(
                 rect = Rect(
-                    -5f,
+                    -8f,
                     bumpHeight,
-                    (cornerRadius * 2) - 5f,
+                    (cornerRadius * 2) - 8f,
                     bumpHeight + cornerRadius * 2
                 ),
                 startAngleDegrees = 180f,
@@ -118,9 +118,9 @@ class BorderShape(
 
             arcTo(
                 rect = Rect(
-                    size.width - cornerRadius * 2,
+                    (size.width - cornerRadius * 2) + 8f,
                     bumpHeight,
-                    size.width,
+                    size.width + 8f,
                     bumpHeight + cornerRadius * 2
                 ),
                 startAngleDegrees = 270f,

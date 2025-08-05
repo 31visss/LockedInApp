@@ -3,11 +3,13 @@ package com.example.lockedin.ui.navigation
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -49,17 +51,19 @@ fun NavigationItems(
 ) {
     Column(
         modifier = Modifier
-            .padding(top = 30.dp)
+            .fillMaxHeight()
+            //.padding(top = 30.dp)
+            .background(Color.White)
             .clickable(onClick = onClick,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }),
         horizontalAlignment = Alignment.CenterHorizontally, // << This centers the Icon and Text
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Bottom
     ) {
         Icon(
             modifier = Modifier
                 .size(iconSize)
-                .offset(y = if (isEdited) -10.dp else 0.dp),
+                .offset(y = if (isEdited) 1.dp else 0.dp),
             painter = painterResource(id = icon),
             contentDescription = label,
             tint = if (selected) colors.selectedIconColor else colors.unselectedIconColor
