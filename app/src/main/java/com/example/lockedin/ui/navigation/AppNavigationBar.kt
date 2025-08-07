@@ -68,7 +68,7 @@ fun AppNavigationBar(navHostController: NavHostController, bottomPadding: Dp) {
     )
 
     NavigationBar(
-        containerColor = Color.Red,
+        containerColor = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
             //.padding(bottom = bottomPadding)

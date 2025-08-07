@@ -52,8 +52,8 @@ fun NavigationItems(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            //.padding(top = 30.dp)
-            .background(Color.White)
+//            .padding(top = 30.dp)
+//            .background(Color.White)
             .clickable(onClick = onClick,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }),
