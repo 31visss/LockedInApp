@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,20 +37,27 @@ import java.util.Locale
 @Composable
 fun Dates() {
     val currentDate = LocalDate.now()
+    val startDate = currentDate.minusYears(2)
+    val endDate = currentDate.plusYears(2)
     val daysRange = (-30..30).map { currentDate.plusDays(it.toLong()) }
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = 30)
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = 30,
+        initialFirstVisibleItemScrollOffset = 10)
 
     LazyRow(state = listState) {
         items(daysRange) { date ->
             Card(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 6.dp)
                     .padding(top = 40.dp)
-                    .height(65.dp)
+                    .height(if (currentDate == date) 85.dp else 65.dp)
+                    .offset(y = if (currentDate == date) 0.dp else 10.dp)
                     .width(53.dp)
                     .border(0.8.dp, Color.DarkGray, RoundedCornerShape(30.dp)),
                 shape = RoundedCornerShape(30.dp),
-                colors = CardDefaults.cardColors(TransparentGreyishWhitish13)
+                colors = if (currentDate == date)
+                    CardDefaults.cardColors() else CardDefaults.cardColors(
+                    TransparentGreyishWhitish13
+                )
             ) {
                 var currentDateText by remember { mutableStateOf("") }
                 var currentDayText by remember { mutableStateOf("") }
