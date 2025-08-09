@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.lockedin.ui.features.CreateEditScreen
 import com.example.lockedin.ui.features.homescreen.HomeScreen
 import com.example.lockedin.ui.features.UserProfile
+import com.example.lockedin.ui.features.homescreen.DatePicker
 
 @Composable
 fun AppNavHost(navHostController: NavHostController, innerPadding: PaddingValues) {
@@ -18,7 +19,7 @@ fun AppNavHost(navHostController: NavHostController, innerPadding: PaddingValues
         startDestination = Screen.Home.route,
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable(Screen.Home.route) { HomeScreen() }
+        composable(Screen.Home.route) { DatePicker() }
         composable(Screen.CreateEdit.route) { CreateEditScreen() }
         composable(Screen.UserProfile.route) { UserProfile() }
 

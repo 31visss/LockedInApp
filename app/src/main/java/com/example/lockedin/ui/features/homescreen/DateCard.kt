@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListPrefetchStrategy
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -18,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +39,15 @@ import java.util.Locale
 @Composable
 fun Dates() {
     val currentDate = LocalDate.now()
-    val startDate = currentDate.minusYears(2)
-    val endDate = currentDate.plusYears(2)
-    val daysRange = (-30..30).map { currentDate.plusDays(it.toLong()) }
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = 30,
-        initialFirstVisibleItemScrollOffset = 10)
+    val listState = rememberLazyListState()
+    val initialList = (0..30).toMutableList()
+    val newList = (0..30).toMutableList()
+    val daysRange = (initialList).map { currentDate.plusDays(it.toLong()) }
+
+
+    if (listState.layoutInfo.totalItemsCount - 1  == initialList.size - 10) {
+        initialList.addAll(newList)
+    }
 
     LazyRow(state = listState) {
         items(daysRange) { date ->
