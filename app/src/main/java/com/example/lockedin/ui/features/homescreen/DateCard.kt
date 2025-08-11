@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lockedin.ui.theme.GreyishWhitish
 import com.example.lockedin.ui.theme.TransparentGreyishWhitish13
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -40,14 +42,27 @@ import java.util.Locale
 fun Dates() {
     val currentDate = LocalDate.now()
     val listState = rememberLazyListState()
-    val initialList = (0..30).toMutableList()
-    val newList = (0..30).toMutableList()
+    var initialList by remember { mutableStateOf((0..30).toList())}
+    val newList = (1..30).map{ initialList.last() + it}
     val daysRange = (initialList).map { currentDate.plusDays(it.toLong()) }
+    var isLoading by remember { mutableStateOf(false) }
 
 
-    if (listState.layoutInfo.totalItemsCount - 1  == initialList.size - 10) {
-        initialList.addAll(newList)
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .distinctUntilChanged()
+            .collect { visibleIndex ->
+                if (visibleIndex == listState.layoutInfo.totalItemsCount - 11 && !isLoading) {
+                    isLoading = true
+                    initialList = initialList + newList
+                }
+            }
     }
+
+    LaunchedEffect(initialList.size) {
+        isLoading = false
+    }
+
 
     LazyRow(state = listState) {
         items(daysRange) { date ->
@@ -56,7 +71,7 @@ fun Dates() {
                     .padding(horizontal = 6.dp)
                     .padding(top = 40.dp)
                     .height(if (currentDate == date) 85.dp else 65.dp)
-                    .offset(y = if (currentDate == date) 0.dp else 10.dp)
+                    //.offset(y = if (currentDate == date) 0.dp else 10.dp)
                     .width(53.dp)
                     .border(0.8.dp, Color.DarkGray, RoundedCornerShape(30.dp)),
                 shape = RoundedCornerShape(30.dp),

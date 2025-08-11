@@ -29,14 +29,14 @@ class BumpShape(
         val cornerRadius = with(density) {cornerRadius.toPx()}
 
         val path = Path().apply {
-            moveTo(0f, size.height)
+            moveTo(-8f, size.height)
             lineTo(0f, bumpHeight + cornerRadius)
 
             arcTo(
                 rect = Rect(
-                    0f,
+                    -8f,
                     bumpHeight,
-                    cornerRadius * 2,
+                    (cornerRadius * 2) - 8f,
                     bumpHeight + cornerRadius * 2
                 ),
                 startAngleDegrees = 180f,
@@ -57,9 +57,9 @@ class BumpShape(
 
             arcTo(
                 rect = Rect(
-                    size.width - cornerRadius * 2,
+                    (size.width - cornerRadius * 2) + 8f,
                     bumpHeight,
-                    size.width,
+                    size.width + 8f,
                     bumpHeight + cornerRadius * 2
                 ),
                 startAngleDegrees = 270f,

@@ -19,7 +19,7 @@ fun AppNavHost(navHostController: NavHostController, innerPadding: PaddingValues
         startDestination = Screen.Home.route,
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable(Screen.Home.route) { DatePicker() }
+        composable(Screen.Home.route) { HomeScreen() }
         composable(Screen.CreateEdit.route) { CreateEditScreen() }
         composable(Screen.UserProfile.route) { UserProfile() }
 

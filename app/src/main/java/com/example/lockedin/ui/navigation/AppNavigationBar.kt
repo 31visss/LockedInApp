@@ -73,7 +73,7 @@ fun AppNavigationBar(navHostController: NavHostController, bottomPadding: Dp) {
             .fillMaxWidth()
             //.padding(bottom = bottomPadding)
             .height(120.dp)
-            .clip(BumpShape(25.dp, 60.dp, 20.dp))
+            .clip(BumpShape(25.dp, 60.dp, 25.dp))
             .border(1.2.dp, Color(0xFF1A1A1A), BorderShape(25.dp, 60.dp, 25.dp))
     ) {
         Spacer(modifier = Modifier.weight(1f))

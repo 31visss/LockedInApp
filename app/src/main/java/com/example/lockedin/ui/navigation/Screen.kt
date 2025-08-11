@@ -17,7 +17,8 @@ sealed class Screen(
     val iconSize: Dp,
     val isPrecolored: Boolean,
     val unselectedIcon: Int,
-    val selectedIcon: Int){
+    val selectedIcon: Int
+){
     object Home: Screen(
         "Home",
         "home",
